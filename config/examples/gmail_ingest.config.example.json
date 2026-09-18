@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "mode": "shadow",
+  "provider": "gmail_readonly",
+  "query": "<gmail-search-query>",
+  "lifecycle_event_start_at": "<ISO-8601-timestamp>",
+  "max_results_per_poll": 10,
+  "allowed_event_types": [
+    "reservation_created",
+    "reservation_changed",
+    "reservation_change_requested",
+    "reservation_cancelled"
+  ],
+  "external_writes_enabled": false,
+  "automation_bridge_enabled": false
+}

@@ -1,0 +1,1 @@
+"""Telegram isolation tests."""

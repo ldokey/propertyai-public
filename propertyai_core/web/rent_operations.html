@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>월세 운영</title>
+<style>
+:root{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#1d2520;background:#f5f6f3;line-height:1.45;--line:#d9ddd7;--ink:#1d2520;--muted:#69716b;--paper:#fff;--accent:#2c5743;--soft:#eef3ef;--danger:#8a302c;--warn:#7a5c15}
+*{box-sizing:border-box}body{margin:0}button,input,select,textarea{font:inherit;color:inherit}button{cursor:pointer}.app{max-width:1440px;margin:0 auto;padding:18px}.top{display:flex;gap:14px;align-items:flex-start;justify-content:space-between;margin-bottom:14px}.title h1{font-size:24px;margin:0}.title p{margin:5px 0 0;color:var(--muted);font-size:13px}.badge{border:1px solid #9eb1a4;background:var(--soft);padding:6px 9px;border-radius:999px;font-size:12px;white-space:nowrap}.notice{background:#fff8e8;border:1px solid #ead9aa;padding:10px 12px;border-radius:10px;margin-bottom:12px;font-size:13px}.tabs{display:flex;gap:6px;overflow:auto;padding-bottom:8px}.tab{border:1px solid var(--line);background:var(--paper);border-radius:9px;padding:8px 11px;white-space:nowrap}.tab.active{background:var(--ink);color:white;border-color:var(--ink)}.panel{display:none}.panel.active{display:block}.card{background:var(--paper);border:1px solid var(--line);border-radius:13px;padding:14px;margin-bottom:12px}.card h2,.card h3{margin:0 0 10px}.filters{display:grid;grid-template-columns:150px minmax(150px,1fr) minmax(150px,1fr) minmax(190px,1.4fr) auto;gap:8px;align-items:end}.field{display:flex;flex-direction:column;gap:5px;min-width:0}.field label{font-size:12px;color:var(--muted);font-weight:600}.field input,.field select,.field textarea{width:100%;border:1px solid #cdd2cd;border-radius:8px;padding:9px;background:white}.field textarea{min-height:130px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;resize:vertical}.btn{border:1px solid #bcc4bd;border-radius:8px;background:white;padding:9px 12px;font-weight:650}.btn.primary{background:var(--accent);border-color:var(--accent);color:white}.btn.danger{border-color:#d9aaa7;color:var(--danger)}.btn:disabled{opacity:.45;cursor:not-allowed}.summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:12px 0}.metric{background:var(--paper);border:1px solid var(--line);border-radius:11px;padding:12px}.metric small{display:block;color:var(--muted);margin-bottom:3px}.metric strong{font-size:19px}.metric.scope{background:#f8faf8}.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:10px;background:white}table{width:100%;border-collapse:collapse;min-width:880px}th,td{text-align:left;padding:9px 10px;border-bottom:1px solid #eceeeb;font-size:13px;vertical-align:top}th{background:#f7f8f6;color:#4e5750;position:sticky;top:0}.money{text-align:right;font-variant-numeric:tabular-nums}.status{display:inline-block;border:1px solid #ccd2cd;border-radius:999px;padding:2px 7px;font-size:11px}.status.PAID{background:#edf7f0}.status.PARTIAL{background:#fff6de}.status.UNPAID{background:#fff0ef}.status.VOID{background:#eee}.row-button{border:0;background:transparent;padding:0;text-align:left;color:#244e3c;text-decoration:underline}.pager{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:10px;font-size:13px}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.workflow{display:flex;gap:4px;flex-wrap:wrap;margin:5px 0 12px}.step{border:1px solid var(--line);border-radius:999px;padding:4px 8px;font-size:11px;color:var(--muted)}.step.current{background:var(--ink);color:#fff}.preview{background:#f7f8f6;border:1px dashed #bfc7c0;border-radius:9px;padding:10px;white-space:pre-wrap;word-break:break-word;font:12px ui-monospace,SFMono-Regular,Menlo,monospace;max-height:320px;overflow:auto}.state-box{border-radius:9px;padding:10px;margin-top:10px;font-size:13px}.state-box.ok{background:#edf7f0}.state-box.unknown{background:#fff6de}.state-box.error{background:#fff0ef}.inline{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.muted{color:var(--muted);font-size:12px}.ledger{display:flex;flex-direction:column;gap:8px}.event{border-left:4px solid #b8c4bb;background:#fafbfa;padding:9px 10px;border-radius:7px}.event strong{font-size:13px}.event .meta{font-size:11px;color:var(--muted);word-break:break-all}.empty{padding:28px;text-align:center;color:var(--muted)}.error-banner{display:none;background:#fff0ef;border:1px solid #e0b5b2;color:#742d29;border-radius:9px;padding:10px;margin-bottom:10px}.error-banner.show{display:block}.mobile-only{display:none}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+@media(max-width:900px){.filters{grid-template-columns:1fr 1fr}.summary{grid-template-columns:1fr 1fr}.grid2,.grid3{grid-template-columns:1fr}.filters .apply{grid-column:1/-1}.top{flex-direction:column}.badge{align-self:flex-start}}
+@media(max-width:720px){.app{padding:10px}.title h1{font-size:21px}.filters{grid-template-columns:1fr}.summary{grid-template-columns:1fr 1fr}.table-wrap{overflow:visible;border:0;background:transparent}table{min-width:0;display:block}thead{display:none}tbody{display:flex;flex-direction:column;gap:8px}tr{display:grid;grid-template-columns:1fr 1fr;background:white;border:1px solid var(--line);border-radius:10px;padding:9px}td{display:block;border:0;padding:4px 6px;min-width:0;word-break:break-word}td::before{content:attr(data-label);display:block;font-size:10px;color:var(--muted);font-weight:700}.money{text-align:left}.mobile-only{display:block}.card{padding:11px}.metric strong{font-size:16px}.btn{min-height:42px}.tabs{margin:0 -10px;padding:0 10px 8px}.workflow{gap:3px}.step{font-size:10px}}
+@media(max-width:360px){.summary{grid-template-columns:1fr}.app{padding:8px}.tabs{margin-left:-8px;margin-right:-8px;padding-left:8px;padding-right:8px}tr{grid-template-columns:1fr}.inline>*{width:100%}}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <div class="title"><h1>월세 운영</h1><p>청구 · 입금 · 명시적 배분 · 미배분 · 정정/환불 기록</p></div>
+    <div class="badge" id="allocationPolicy">자동 배분 OFF · 명시적 배분만</div>
+  </header>
+  <div class="notice"><strong>중요:</strong> “환불 기록”은 이미 외부에서 실행된 반환 사실을 원장에 기록하는 기능입니다. 이 화면은 은행 송금을 실행하지 않습니다.</div>
+  <div id="globalError" class="error-banner" role="alert"></div>
+  <nav class="tabs" aria-label="월세 운영 메뉴">
+    <button class="tab active" data-tab="rent">월세 목록</button>
+    <button class="tab" data-tab="payment">입금·배분</button>
+    <button class="tab" data-tab="unallocated">미배분·선수금</button>
+    <button class="tab" data-tab="ledger">원장</button>
+    <button class="tab" data-tab="correction">정정·환불 기록</button>
+  </nav>
+
+  <section class="panel active" data-panel="rent">
+    <div class="card">
+      <div class="filters">
+        <div class="field"><label for="month">선택 월</label><input id="month" type="month"></div>
+        <div class="field"><label for="propertyFilter">숙소</label><select id="propertyFilter"><option value="">전체 숙소</option></select></div>
+        <div class="field"><label for="unitFilter">호실</label><select id="unitFilter"><option value="">전체 호실</option></select></div>
+        <div class="field"><label for="search">검색</label><input id="search" type="search" placeholder="입주자·숙소·호실·청구 ID"></div>
+        <button class="btn primary apply" id="applyFilters">조회</button>
+      </div>
+      <div class="summary" id="summary">
+        <div class="metric"><small>선택 월 청구액</small><strong id="sumObligation">-</strong></div>
+        <div class="metric"><small>선택 월 배분액</small><strong id="sumAllocated">-</strong></div>
+        <div class="metric"><small>선택 월 미수</small><strong id="sumSelectedOutstanding">-</strong></div>
+        <div class="metric scope"><small>전체 기간 미수</small><strong id="sumTotalOutstanding">-</strong></div>
+      </div>
+      <p class="muted">요약은 현재 필터의 <strong>전체 조회 결과</strong> 기준이며, 현재 페이지 행의 소계가 아닙니다. “선택 월 미수”와 “전체 기간 미수”를 합치지 않습니다.</p>
+      <div class="table-wrap"><table aria-label="월세 청구 목록"><thead><tr><th>입주자 / 호실</th><th>납부기한</th><th>상태</th><th class="money">청구</th><th class="money">납부</th><th class="money">미수</th><th>작업</th></tr></thead><tbody id="rentRows"></tbody></table></div>
+      <div class="pager"><button class="btn" id="prevPage">이전</button><span id="pageInfo">-</span><button class="btn" id="nextPage">다음</button></div>
+    </div>
+  </section>
+
+  <section class="panel" data-panel="payment">
+    <div class="grid2">
+      <div class="card">
+        <h2>입금 기록</h2>
+        <div class="workflow"><span class="step current">1 입력</span><span class="step">2 미리보기</span><span class="step">3 확인</span><span class="step">4 결과</span></div>
+        <div class="grid2">
+          <div class="field"><label for="payAccount">입금 계좌</label><select id="payAccount"></select></div>
+          <div class="field"><label for="payDate">입금일</label><input id="payDate" type="date"></div>
+          <div class="field"><label for="payAmount">입금액 (KRW)</label><input id="payAmount" inputmode="numeric" placeholder="300000"></div>
+          <div class="field"><label for="payPayer">입금자 표시</label><input id="payPayer" maxlength="120"></div>
+        </div>
+        <p><label><input type="checkbox" id="payAllocate"> 이 입금과 동시에 청구에 <strong>명시적으로</strong> 배분</label></p>
+        <div id="payAllocationFields" hidden>
+          <div class="grid2">
+            <div class="field"><label for="payReceivable">배분 대상 청구</label><select id="payReceivable"></select></div>
+            <div class="field"><label for="payAllocationAmount">배분액</label><input id="payAllocationAmount" inputmode="numeric"></div>
+          </div>
+          <p class="muted">가장 오래된 미수에 자동 배분하지 않습니다. 선택한 청구에만 서버 명령을 보냅니다.</p>
+        </div>
+        <button class="btn primary" id="previewPayment">입금 작업 미리보기</button>
+      </div>
+      <div class="card">
+        <h2>기존 미배분금 배분</h2>
+        <div class="field"><label for="allocationSource">미배분 원천</label><select id="allocationSource"></select></div>
+        <div class="field"><label for="allocationReceivable">배분 대상 청구</label><select id="allocationReceivable"></select></div>
+        <div class="field"><label for="allocationAmount">명시적 배분액</label><input id="allocationAmount" inputmode="numeric"></div>
+        <p class="muted">미배분 잔액을 미래 청구에 자동으로 변환하거나 배분하지 않습니다.</p>
+        <button class="btn primary" id="previewAllocation">배분 작업 미리보기</button>
+      </div>
+    </div>
+    <div class="card" id="operationCard">
+      <h3>작업 확인 / 결과</h3>
+      <div id="operationState" data-operation-state="IDLE" class="state-box">아직 준비된 작업이 없습니다.</div>
+      <pre class="preview" id="operationPreview">-</pre>
+      <div class="inline" style="margin-top:10px">
+        <label><input type="checkbox" id="operationConfirm"> 위 작업 대상을 확인했습니다.</label>
+        <button class="btn primary" id="submitOperation" disabled>확인 후 실행</button>
+        <button class="btn" id="checkOperation" hidden>결과 확인</button>
+        <button class="btn" id="retryOperation" hidden>같은 작업 키로 재시도</button>
+      </div>
+      <p class="muted">네트워크 타임아웃은 실패 확정이 아닙니다. 결과를 알 수 없을 때는 같은 Idempotency-Key로 조회/재시도하며 새 키를 만들지 않습니다.</p>
+    </div>
+  </section>
+
+  <section class="panel" data-panel="unallocated">
+    <div class="card"><h2>미배분 · 선수금성 잔액</h2><p class="muted">아직 배분하지 않은 입금과 현재 사용 가능한 잔액입니다. 자동 배분은 하지 않습니다.</p><div id="sourceCards" class="grid3"></div></div>
+  </section>
+
+  <section class="panel" data-panel="ledger">
+    <div class="card">
+      <div class="inline"><h2 style="margin:0">재무 원장</h2><button class="btn" id="ledgerAll">전체 이력</button><button class="btn" id="ledgerSelected">선택 청구 이력</button></div>
+      <p class="muted">원본 사실을 덮어쓰지 않고 청구·입금·배분·역분개·조정·환불 기록을 시간순으로 표시합니다.</p>
+      <div id="ledgerBalance" class="state-box"></div><div id="ledgerEvents" class="ledger"></div>
+    </div>
+  </section>
+
+  <section class="panel" data-panel="correction">
+    <div class="grid2">
+      <div class="card">
+        <h2>정정 / 환불 기록 작업</h2>
+        <div class="field"><label for="correctionAction">작업</label><select id="correctionAction">
+          <option value="adjustReceivable">청구 금액 조정</option>
+          <option value="voidReceivable">청구 무효</option>
+          <option value="correctAllocations">배분 정정 / 역분개</option>
+          <option value="correctMovement">입금 이동 정정</option>
+          <option value="recordRefund">환불 사실 기록 (송금 실행 아님)</option>
+          <option value="correctRefund">환불 기록 정정</option>
+        </select></div>
+        <div class="field"><label for="correctionTarget">대상 ID (대상이 없는 작업은 비움)</label><input id="correctionTarget" placeholder="청구/입금/환불 기록 ID"></div>
+        <div class="field"><label for="correctionReason">정정 사유</label><input id="correctionReason" maxlength="500"></div>
+        <div class="field"><label for="correctionDetails">현재 계약의 추가 필드 (JSON)</label><textarea id="correctionDetails" spellcheck="false">{}</textarea></div>
+        <div class="inline"><button class="btn" id="fillCorrection">선택 항목 기준 기본값 채우기</button><button class="btn primary" id="previewCorrection">영향 미리보기</button></div>
+        <p class="muted">금액/배분 적법성은 이 화면이 재계산하지 않습니다. 미리보기는 “보낼 명령”을 보여주며 최종 검증과 결과 잔액은 서버가 결정합니다.</p>
+      </div>
+      <div class="card">
+        <h2>정정 절차</h2>
+        <ol><li>대상 원장 사실과 현재 잔액 확인</li><li>사유 및 정정 명령 입력</li><li>영향 미리보기</li><li>명시적 확인</li><li>Idempotency-Key로 제출</li><li>서버 결과/원장 재조회</li></ol>
+        <div class="notice"><strong>RECORD_REFUND:</strong> 은행 이체 버튼이 아닙니다. 외부 반환이 실제로 확인된 경우에만 <code>actual_transfer_confirmed=true</code>를 기록합니다.</div>
+        <button class="btn" id="goLedger">현재 원장 보기</button>
+      </div>
+    </div>
+    <div class="card">
+      <h3>정정 작업 확인 / 결과</h3>
+      <div id="correctionState" data-correction-state="IDLE" class="state-box">아직 준비된 정정 작업이 없습니다.</div>
+      <pre class="preview" id="correctionPreview">-</pre>
+      <div class="inline" style="margin-top:10px">
+        <label><input type="checkbox" id="correctionConfirm"> 대상과 영향 미리보기를 확인했습니다.</label>
+        <button class="btn primary" id="submitCorrection" disabled>정정 명령 실행</button>
+        <button class="btn" id="checkCorrection" hidden>결과 확인</button>
+        <button class="btn" id="retryCorrection" hidden>같은 작업 키로 재시도</button>
+      </div>
+    </div>
+  </section>
+</div>
+<script type="application/json" id="rent-bootstrap">__RENT_BOOTSTRAP__</script>
+<script>
+"use strict";
+const bootstrap=JSON.parse(document.getElementById("rent-bootstrap").textContent);
+const $=id=>document.getElementById(id);
+const today=()=>new Date().toISOString().slice(0,10);
+const currentMonth=()=>new Date().toISOString().slice(0,7);
+const money=v=>v===null||v===undefined?"-":Number(v).toLocaleString("ko-KR")+"원";
+const state={context:null,overview:null,selectedReceivable:null,page:1,pageSize:12,pending:null,correctionPending:null,inFlight:false,correctionInFlight:false};
+$("month").value=currentMonth();$("payDate").value=today();
+
+function showError(message){const box=$("globalError");box.textContent=message||"";box.classList.toggle("show",Boolean(message));}
+function classify(status,body){if(status===401)return"AUTH_ERROR";if(status===403)return"AUTH_ERROR";if(status===422||status===409)return"VALIDATION_ERROR";return"SYSTEM_ERROR";}
+async function getJSON(url){const r=await fetch(url,{credentials:"same-origin",headers:{"Accept":"application/json"}});let b={};try{b=await r.json()}catch{}if(!r.ok){const e=new Error(b.code||("HTTP_"+r.status));e.status=r.status;e.body=b;throw e}return b;}
+async function mutation(url,body,key){const controller=new AbortController();const timer=setTimeout(()=>controller.abort(),8000);try{const r=await fetch(url,{method:"POST",credentials:"same-origin",headers:{"Content-Type":"application/json","X-CSRF-Token":bootstrap.csrf_token,"Idempotency-Key":key},body:JSON.stringify(body),signal:controller.signal});let b={};try{b=await r.json()}catch{}return{ok:r.ok,status:r.status,body:b,unknown:(!r.ok&&Boolean(b.state_unknown))};}catch(error){return{ok:false,status:0,body:{code:"NO_CONFIRMED_RESPONSE",message:String(error&&error.name||error)},unknown:true};}finally{clearTimeout(timer)}}
+function qs(values){const p=new URLSearchParams();Object.entries(values).forEach(([k,v])=>{if(v!==null&&v!==undefined)p.set(k,String(v))});return p.toString();}
+function setTab(name){document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("active",x.dataset.tab===name));document.querySelectorAll(".panel").forEach(x=>x.classList.toggle("active",x.dataset.panel===name));}
+document.querySelectorAll(".tab").forEach(x=>x.addEventListener("click",()=>setTab(x.dataset.tab)));
+
+async function loadContext(){state.context=await getJSON(bootstrap.routes.context);renderReference();renderSources();}
+function renderReference(){if(!state.context)return;const units=state.context.reference_data.units||[],accounts=state.context.reference_data.accounts||[];const properties=new Map();units.forEach(u=>properties.set(u.property_id,u.property_name));$("propertyFilter").innerHTML='<option value="">전체 숙소</option>'+[...properties].map(([id,name])=>`<option value="${id}">${escapeHtml(name)}</option>`).join("");renderUnitOptions();$("payAccount").innerHTML=accounts.filter(a=>a.active).map(a=>`<option value="${a.account_id}">${escapeHtml(a.display_name)} · ${escapeHtml(a.masked_identifier||"")}</option>`).join("");}
+function renderUnitOptions(){if(!state.context)return;const property=$("propertyFilter").value;const units=state.context.reference_data.units.filter(u=>u.active&&(!property||u.property_id===property));$("unitFilter").innerHTML='<option value="">전체 호실</option>'+units.map(u=>`<option value="${u.rental_unit_id}">${escapeHtml(u.property_name)} · ${escapeHtml(u.unit_name)}</option>`).join("");}
+$("propertyFilter").addEventListener("change",()=>{renderUnitOptions();$("unitFilter").value=""});
+
+async function loadOverview(){showError("");const url=bootstrap.routes.overview+"?"+qs({month:$("month").value,property_id:$("propertyFilter").value,unit_id:$("unitFilter").value,search:$("search").value,page:state.page,page_size:state.pageSize});try{state.overview=await getJSON(url);renderOverview();}catch(e){renderOverviewError(e);}}
+function renderOverviewError(e){$("rentRows").innerHTML='<tr><td colspan="7" class="empty">목록을 불러오지 못했습니다.</td></tr>';showError((e.body&&e.body.code)||e.message);}
+function renderOverview(){const o=state.overview,s=o.summary;$("sumObligation").textContent=money(s.selected_month_obligation);$("sumAllocated").textContent=money(s.selected_month_allocated);$("sumSelectedOutstanding").textContent=money(s.selected_month_outstanding);$("sumTotalOutstanding").textContent=money(s.all_period_outstanding);const rows=o.rows||[];$("rentRows").innerHTML=rows.length?rows.map(r=>`<tr><td data-label="입주자 / 호실"><strong>${escapeHtml(r.resident_names||"입주자 미표시")}</strong><br><span class="muted">${escapeHtml(r.property_name)} · ${escapeHtml(r.unit_name)}</span></td><td data-label="납부기한">${escapeHtml(r.due_on||"-")}</td><td data-label="상태"><span class="status ${r.payment_state}">${escapeHtml(r.payment_state)}</span><br><span class="muted">${escapeHtml(r.overdue_state)}</span></td><td data-label="청구" class="money">${money(r.effective_amount)}</td><td data-label="납부" class="money">${money(r.allocated)}</td><td data-label="미수" class="money"><strong>${money(r.balance)}</strong></td><td data-label="작업"><button class="row-button" data-select-receivable="${r.receivable_id}">선택/원장</button></td></tr>`).join(""):'<tr><td colspan="7" class="empty">현재 필터의 월세 청구가 없습니다.</td></tr>';document.querySelectorAll("[data-select-receivable]").forEach(b=>b.addEventListener("click",()=>selectReceivable(b.dataset.selectReceivable)));const p=o.pagination;$("pageInfo").textContent=`${p.page} / ${p.total_pages} 페이지 · 전체 ${p.total_rows}건`;$("prevPage").disabled=p.page<=1;$("nextPage").disabled=p.page>=p.total_pages;renderReceivableOptions();}
+function currentRow(id){return state.overview&&state.overview.rows.find(r=>r.receivable_id===id)}
+async function selectReceivable(id){state.selectedReceivable=id;renderReceivableOptions();await loadLedger(id,null);setTab("ledger");}
+function renderReceivableOptions(){const rows=(state.overview&&state.overview.rows)||[];const options=rows.map(r=>`<option value="${r.receivable_id}">${escapeHtml(r.resident_names||r.receivable_id.slice(0,8))} · ${escapeHtml(r.unit_name)} · 미수 ${money(r.balance)}</option>`).join("");for(const id of ["payReceivable","allocationReceivable"]){const el=$(id);el.innerHTML=options;if(state.selectedReceivable&&rows.some(r=>r.receivable_id===state.selectedReceivable))el.value=state.selectedReceivable;}}
+$("applyFilters").addEventListener("click",()=>{state.page=1;loadOverview()});$("search").addEventListener("keydown",e=>{if(e.key==="Enter"){state.page=1;loadOverview()}});$("prevPage").addEventListener("click",()=>{if(state.page>1){state.page--;loadOverview()}});$("nextPage").addEventListener("click",()=>{state.page++;loadOverview()});
+
+function renderSources(){if(!state.context)return;const rows=state.context.funding_sources.rows||[];const available=rows.filter(s=>Number(s.available)>0);$("sourceCards").innerHTML=available.length?available.map(s=>`<div class="metric"><small>원천 ${s.source_id.slice(0,8)}</small><strong>${money(s.available)}</strong><div class="muted">입금 ${money(s.principal)} · 배분 ${money(s.allocated)} · 반환기록 ${money(s.returned)}<br>${escapeHtml(s.attribution_status)}</div><button class="row-button" data-source-ledger="${s.source_id}">원장 보기</button></div>`).join(""):'<div class="empty">현재 미배분 잔액이 없습니다.</div>';document.querySelectorAll("[data-source-ledger]").forEach(b=>b.addEventListener("click",async()=>{await loadLedger(null,b.dataset.sourceLedger);setTab("ledger")}));$("allocationSource").innerHTML=available.map(s=>`<option value="${s.source_id}">${s.source_id.slice(0,8)} · 사용가능 ${money(s.available)}</option>`).join("");}
+$("payAllocate").addEventListener("change",()=>{$("payAllocationFields").hidden=!$("payAllocate").checked});
+
+function operationSummary(op){return JSON.stringify({operation:op.operation,route:op.route,command_type:op.commandType,idempotency_key:op.key,body:op.body,note:"금액·배분 적법성은 서버가 검증하며 이 미리보기는 별도 회계 계산을 하지 않습니다."},null,2);}
+function prepareOperation(op,kind="payment"){op.key=crypto.randomUUID();op.kind=kind;op.inFlight=false;if(kind==="payment"){state.pending=op;$("operationPreview").textContent=operationSummary(op);$("operationConfirm").checked=false;$("submitOperation").disabled=true;$("checkOperation").hidden=true;$("retryOperation").hidden=true;setOperationState("READY_FOR_CONFIRMATION","작업 미리보기를 확인하세요.","");}else{state.correctionPending=op;$("correctionPreview").textContent=operationSummary(op);$("correctionConfirm").checked=false;$("submitCorrection").disabled=true;$("checkCorrection").hidden=true;$("retryCorrection").hidden=true;setCorrectionState("READY_FOR_CONFIRMATION","정정 대상과 명령을 확인하세요.","");}}
+function ensureContext(){if(!state.context)throw new Error("운영 컨텍스트를 먼저 불러와야 합니다.");}
+function buildReceipt(){ensureContext();const amount=$("payAmount").value.trim(),account=$("payAccount").value;if(!account||!amount||!$("payDate").value)throw new Error("계좌·입금일·입금액을 입력하세요.");const allocations=[];let attribution={status:"UNMATCHED",property_id:null,contract_id:null};if($("payAllocate").checked){const row=currentRow($("payReceivable").value);if(!row)throw new Error("현재 페이지에서 배분 대상 청구를 선택하세요.");const a=$("payAllocationAmount").value.trim();if(!a)throw new Error("명시적 배분액을 입력하세요.");attribution={status:"CONTRACT_CONFIRMED",property_id:row.property_id,contract_id:row.contract_id};allocations.push({receivable_id:row.receivable_id,amount:a,expected_version:row.version,attribution_confirmed:true,override_attribution_reason:null});}return{operation:"recordReceipt",route:"/api/v1/rent/movements",commandType:"RECORD_RECEIPT",body:{account_id:account,occurred_on:$("payDate").value,amount,currency:"KRW",payer_raw:$("payPayer").value||null,counterparty_party_id:null,attribution,allocations,expected_ledger_revision:state.context.ledger_revision}};}
+function buildAllocation(){ensureContext();const source=state.context.funding_sources.rows.find(s=>s.source_id===$("allocationSource").value);const row=currentRow($("allocationReceivable").value);const amount=$("allocationAmount").value.trim();if(!source||!row||!amount)throw new Error("미배분 원천·청구·배분액을 선택하세요.");return{operation:"allocate",route:"/api/v1/rent/allocations",commandType:"ALLOCATE",body:{source_id:source.source_id,expected_source_version:source.version,expected_ledger_revision:state.context.ledger_revision,allocations:[{receivable_id:row.receivable_id,amount,expected_version:row.version,attribution_confirmed:true,override_attribution_reason:null}],attribution:{status:"CONTRACT_CONFIRMED",property_id:row.property_id,contract_id:row.contract_id}}};}
+$("previewPayment").addEventListener("click",()=>{try{prepareOperation(buildReceipt())}catch(e){showError(e.message)}});$("previewAllocation").addEventListener("click",()=>{try{prepareOperation(buildAllocation())}catch(e){showError(e.message)}});
+$("operationConfirm").addEventListener("change",()=>{$("submitOperation").disabled=!$("operationConfirm").checked||!state.pending||state.inFlight});
+function setOperationState(code,text,kind){const box=$("operationState");box.dataset.operationState=code;box.textContent=code+" · "+text;box.className="state-box "+(kind||"");}
+function setCorrectionState(code,text,kind){const box=$("correctionState");box.dataset.correctionState=code;box.textContent=code+" · "+text;box.className="state-box "+(kind||"");}
+async function executePending(kind,retry=false){const correction=kind==="correction",op=correction?state.correctionPending:state.pending;if(!op)return;if(correction?state.correctionInFlight:state.inFlight)return;if(correction)state.correctionInFlight=true;else state.inFlight=true;const submit=$(correction?"submitCorrection":"submitOperation");submit.disabled=true;const setter=correction?setCorrectionState:setOperationState;setter("SUBMITTING","서버 응답을 기다리는 중입니다.","");try{const result=await mutation(op.route,op.body,op.key);op.last=result;if(result.ok){setter("RESULT_CONFIRMED","서버가 작업 결과를 확정했습니다.","ok");(correction?$("correctionPreview"):$("operationPreview")).textContent=JSON.stringify({request:JSON.parse(operationSummary(op)),response:result.body},null,2);$(correction?"checkCorrection":"checkOperation").hidden=true;$(correction?"retryCorrection":"retryOperation").hidden=true;await refreshAfterMutation();}else if(result.unknown){setter("RESULT_UNKNOWN","응답이 불명확합니다. 실패로 단정하지 않습니다.","unknown");$(correction?"checkCorrection":"checkOperation").hidden=false;$(correction?"retryCorrection":"retryOperation").hidden=true;}else{const c=classify(result.status,result.body);setter(c,(result.body&&result.body.code)||("HTTP "+result.status),"error");}}finally{if(correction)state.correctionInFlight=false;else state.inFlight=false;if((correction?$("correctionConfirm"):$("operationConfirm")).checked&&((correction?state.correctionPending:state.pending)))submit.disabled=false;}}
+async function refreshAfterMutation(){await loadContext();await loadOverview();await loadLedger(state.selectedReceivable,null);}
+async function checkPending(kind){const correction=kind==="correction",op=correction?state.correctionPending:state.pending;if(!op)return;const setter=correction?setCorrectionState:setOperationState;try{const result=await getJSON(`/api/v1/rent/commands/by-key/${op.key}?command_type=${encodeURIComponent(op.commandType)}`);if(result.status==="FOUND"){setter("RESULT_CONFIRMED","같은 Idempotency-Key의 확정 결과를 찾았습니다.","ok");(correction?$("correctionPreview"):$("operationPreview")).textContent=JSON.stringify(result.command,null,2);$(correction?"retryCorrection":"retryOperation").hidden=true;await refreshAfterMutation();}else{setter("RETRY_SAME_OPERATION","확정 결과가 없습니다. 필요하면 같은 키로 같은 작업을 재시도하세요.","unknown");$(correction?"retryCorrection":"retryOperation").hidden=false;}}catch(e){setter(classify(e.status,e.body),(e.body&&e.body.code)||e.message,"error");}}
+$("submitOperation").addEventListener("click",()=>executePending("payment"));$("checkOperation").addEventListener("click",()=>checkPending("payment"));$("retryOperation").addEventListener("click",()=>executePending("payment",true));
+
+const correctionMeta={
+ adjustReceivable:{label:"청구 금액 조정",route:t=>`/api/v1/receivables/${t}/adjustments`,commandType:"ADJUST_RECEIVABLE",target:true},
+ voidReceivable:{label:"청구 무효",route:t=>`/api/v1/receivables/${t}/void`,commandType:"VOID_RECEIVABLE",target:true},
+ correctAllocations:{label:"배분 정정",route:()=>"/api/v1/allocation-corrections",commandType:"CORRECT_ALLOCATION",target:false},
+ correctMovement:{label:"입금 이동 정정",route:t=>`/api/v1/movements/${t}/corrections`,commandType:"CORRECT_MOVEMENT",target:true},
+ recordRefund:{label:"환불 사실 기록",route:()=>"/api/v1/refund-records",commandType:"RECORD_REFUND",target:false},
+ correctRefund:{label:"환불 기록 정정",route:t=>`/api/v1/refund-records/${t}/corrections`,commandType:"CORRECT_REFUND",target:true}
+};
+function emptyAllocationPlan(){return{reverse_allocation_ids:[],replacement_allocations:[],source_versions:[],receivable_versions:[]};}
+function fillCorrectionDefaults(){ensureContext();const action=$("correctionAction").value,row=state.selectedReceivable&&currentRow(state.selectedReceivable),source=(state.context.funding_sources.rows||[]).find(s=>Number(s.available)>0)||(state.context.funding_sources.rows||[])[0],account=(state.context.reference_data.accounts||[]).find(a=>a.active);let body={};if(action==="adjustReceivable"&&row){$("correctionTarget").value=row.receivable_id;body={delta:"0",expected_version:row.version,allocation_correction:emptyAllocationPlan(),reverse_adjustment_id:null};}else if(action==="voidReceivable"&&row){$("correctionTarget").value=row.receivable_id;body={expected_version:row.version,allocation_correction:emptyAllocationPlan()};}else if(action==="correctAllocations"){body={plan:emptyAllocationPlan()};}else if(action==="recordRefund"&&source&&account){body={source_id:source.source_id,expected_source_version:source.version,out_account_id:account.account_id,occurred_on:today(),amount:source.available,payee_raw:null,actual_transfer_confirmed:true};}else if(action==="correctMovement"){body={action:"REVERSE_RECORD",corrected_values:null,expected_version:"1",expected_source_version:source?source.version:"1",allocation_correction:emptyAllocationPlan(),replacement_receipt:null};}else if(action==="correctRefund"){body={outgoing_movement_id:"",expected_movement_version:"1",source_versions:[],reverse_return_ids:[],replacement_returns:[],corrected_values:null,action:"REVERSE_RECORD",actual_record_correction_confirmed:true};}$("correctionDetails").value=JSON.stringify(body,null,2);}
+$("fillCorrection").addEventListener("click",()=>{try{fillCorrectionDefaults()}catch(e){showError(e.message)}});
+function buildCorrection(){ensureContext();const action=$("correctionAction").value,meta=correctionMeta[action],target=$("correctionTarget").value.trim(),reason=$("correctionReason").value.trim();if(!reason)throw new Error("정정 사유를 입력하세요.");if(meta.target&&!target)throw new Error("대상 ID를 입력하세요.");let details;try{details=JSON.parse($("correctionDetails").value||"{}")}catch{throw new Error("추가 필드는 올바른 JSON이어야 합니다.")}if(!details||Array.isArray(details)||typeof details!=="object")throw new Error("추가 필드는 JSON 객체여야 합니다.");const body={...details,reason,expected_ledger_revision:state.context.ledger_revision};return{operation:action,route:meta.route(target),commandType:meta.commandType,body,note:action==="recordRefund"?"기존 외부 반환 사실 기록 전용 — 송금 실행 아님":null};}
+$("previewCorrection").addEventListener("click",()=>{try{prepareOperation(buildCorrection(),"correction")}catch(e){showError(e.message)}});$("correctionConfirm").addEventListener("change",()=>{$("submitCorrection").disabled=!$("correctionConfirm").checked||!state.correctionPending||state.correctionInFlight});$("submitCorrection").addEventListener("click",()=>executePending("correction"));$("checkCorrection").addEventListener("click",()=>checkPending("correction"));$("retryCorrection").addEventListener("click",()=>executePending("correction",true));
+
+async function loadLedger(receivableId=null,sourceId=null){try{const result=await getJSON(bootstrap.routes.ledger+"?"+qs({receivable_id:receivableId||"",source_id:sourceId||""}));renderLedger(result);}catch(e){$("ledgerEvents").innerHTML='<div class="empty">원장을 불러오지 못했습니다.</div>';showError((e.body&&e.body.code)||e.message)}}
+function renderLedger(data){if(data.current_receivable){const b=data.current_receivable;$("ledgerBalance").textContent=`현재 청구 잔액 · 유효 청구 ${money(b.effective_amount)} / 배분 ${money(b.allocated)} / 미수 ${money(b.outstanding)} / v${b.version}`;}else if(data.current_source){const s=data.current_source;$("ledgerBalance").textContent=`현재 입금 잔액 · 원금 ${money(s.principal)} / 배분 ${money(s.allocated)} / 반환 ${money(s.returned)} / 미배분 ${money(s.available)}`;}else{$("ledgerBalance").textContent="전체 원장 이력";}$("ledgerEvents").innerHTML=data.events.length?data.events.map(e=>`<div class="event"><strong>${escapeHtml(e.kind)}${e.record_kind?" · "+escapeHtml(e.record_kind):""}</strong> ${e.amount?" · "+money(e.amount):""}<div>${e.reason?escapeHtml(e.reason):""}</div><div class="meta">${escapeHtml(e.occurred_at||"-")} · event ${escapeHtml(e.event_id)}${e.receivable_id?" · receivable "+escapeHtml(e.receivable_id):""}${e.source_id?" · source "+escapeHtml(e.source_id):""}${e.movement_id?" · movement "+escapeHtml(e.movement_id):""}</div></div>`).join(""):'<div class="empty">표시할 원장 이력이 없습니다.</div>';}
+$("ledgerAll").addEventListener("click",()=>loadLedger());$("ledgerSelected").addEventListener("click",()=>loadLedger(state.selectedReceivable,null));$("goLedger").addEventListener("click",()=>{loadLedger(state.selectedReceivable,null);setTab("ledger")});
+function escapeHtml(value){return String(value??"").replace(/[&<>'"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;",'"':"&quot;"}[c]));}
+
+(async()=>{try{await loadContext();await loadOverview();await loadLedger();}catch(e){showError((e.body&&e.body.code)||e.message)}})();
+</script>
+</body>
+</html>

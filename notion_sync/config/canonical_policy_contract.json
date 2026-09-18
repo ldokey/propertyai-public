@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "authority": {
+    "lifecycle_state_and_transition_mode": "OPS_STATE_TRANSITIONS_DRAFT",
+    "workflow_flags_and_checklists": "OPS_GUIDE"
+  },
+  "rules": [
+    {
+      "id": "EXAMPLE.CANCEL.EVIDENCE",
+      "question_terms": [
+        "example",
+        "cancel",
+        "calendar"
+      ],
+      "authoritative_document": "OPS_STATE_TRANSITIONS_DRAFT",
+      "required_evidence": [
+        "SYNTHETIC_MANUAL_EVIDENCE",
+        "Missing calendar evidence alone does not finalize cancellation"
+      ],
+      "normalized_rule": "In the synthetic example, missing calendar evidence alone does not finalize cancellation; SYNTHETIC_MANUAL_EVIDENCE is required."
+    },
+    {
+      "id": "EXAMPLE.RENEWAL.D45",
+      "question_terms": [
+        "example",
+        "45",
+        "renewal"
+      ],
+      "authoritative_document": "OPS_STATE_TRANSITIONS_DRAFT",
+      "required_evidence": [
+        "synthetic D-45",
+        "SYNTHETIC_RENEWAL_REVIEW",
+        "SYNTHETIC_AUTO_DATE"
+      ],
+      "normalized_rule": "At synthetic D-45, the example uses SYNTHETIC_RENEWAL_REVIEW with SYNTHETIC_AUTO_DATE. These values are fixture-only and not operational policy."
+    }
+  ]
+}

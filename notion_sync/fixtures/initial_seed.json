@@ -1,0 +1,122 @@
+{
+  "version": 1,
+  "provider": "public_synthetic_fixture",
+  "fetched_at": "2000-01-01T00:00:00Z",
+  "complete_inventory": false,
+  "documents": [
+    {
+      "source_id": "00000000-0000-4000-8000-000000000001",
+      "kind": "page",
+      "title": "Public authority example",
+      "url": "https://example.invalid/notion/page-01",
+      "last_edited_time": "2000-01-01T00:00:00Z",
+      "collection_mode": "full_page",
+      "content_scope": "synthetic_policy_example",
+      "sensitivity": "internal",
+      "content": "Synthetic fixture only. System A owns current policy state and Archive B owns immutable originals. Current state and history remain distinct."
+    },
+    {
+      "source_id": "00000000-0000-4000-8000-000000000002",
+      "kind": "page",
+      "title": "Public operations guide example",
+      "url": "https://example.invalid/notion/page-02",
+      "last_edited_time": "2000-01-01T00:00:00Z",
+      "collection_mode": "full_page",
+      "content_scope": "synthetic_policy_example",
+      "sensitivity": "internal",
+      "content": "Synthetic fixture only. Read operations do not mutate external systems. Write operations require explicit authority and idempotency checks. SYNTHETIC_REVIEW_FLAG is an example workflow flag."
+    },
+    {
+      "source_id": "00000000-0000-4000-8000-000000000003",
+      "kind": "page",
+      "title": "Public automation workflow example",
+      "url": "https://example.invalid/notion/page-03",
+      "last_edited_time": "2000-01-01T00:00:00Z",
+      "collection_mode": "full_page",
+      "content_scope": "synthetic_policy_example",
+      "sensitivity": "internal",
+      "content": "Synthetic fixture only. Example flow: ingest event, perform deterministic parsing, validate uncertainty, produce a change set, require approval, then apply an idempotent local update."
+    },
+    {
+      "source_id": "00000000-0000-4000-8000-000000000004",
+      "kind": "page",
+      "title": "Public operations manual example",
+      "url": "https://example.invalid/notion/page-04",
+      "last_edited_time": "2000-01-01T00:00:00Z",
+      "collection_mode": "full_page",
+      "content_scope": "synthetic_policy_example",
+      "sensitivity": "internal",
+      "content": "Synthetic fixture only. Example projects are separated by responsibility and stable logical codes. This document contains no real workspace, resource, customer, property, or service identifiers."
+    },
+    {
+      "source_id": "00000000-0000-4000-8000-000000000005",
+      "kind": "page",
+      "title": "Public lifecycle transition example",
+      "url": "https://example.invalid/notion/page-05",
+      "last_edited_time": "2000-01-01T00:00:00Z",
+      "collection_mode": "full_page",
+      "content_scope": "synthetic_policy_example",
+      "sensitivity": "internal",
+      "content": "Synthetic fixture only. Missing calendar evidence alone does not finalize cancellation; SYNTHETIC_MANUAL_EVIDENCE is required. At synthetic D-45, use SYNTHETIC_RENEWAL_REVIEW with SYNTHETIC_AUTO_DATE."
+    },
+    {
+      "source_id": "00000000-0000-4000-8000-000000000006",
+      "kind": "page",
+      "title": "Public data model example",
+      "url": "https://example.invalid/notion/page-06",
+      "last_edited_time": "2000-01-01T00:00:00Z",
+      "collection_mode": "full_page",
+      "content_scope": "synthetic_policy_example",
+      "sensitivity": "internal",
+      "content": "Synthetic fixture only. Example contract totals belong to a contract record while example cash movements belong to a finance record. No real business data is represented."
+    },
+    {
+      "source_id": "collection://00000000-0000-4000-8000-000000000007",
+      "kind": "data_source",
+      "title": "Public resource registry example",
+      "url": "collection://00000000-0000-4000-8000-000000000007",
+      "last_edited_time": null,
+      "collection_mode": "metadata_rows",
+      "content_scope": "safe_metadata_summary",
+      "sensitivity": "internal",
+      "record_count": 2,
+      "content": "Synthetic fixture metadata summary. PUBLIC.REGISTRY and PUBLIC.CONTEXT are example resources. External canonical URLs and service identifiers are intentionally absent."
+    },
+    {
+      "source_id": "collection://00000000-0000-4000-8000-000000000008",
+      "kind": "data_source",
+      "title": "Public project context example",
+      "url": "collection://00000000-0000-4000-8000-000000000008",
+      "last_edited_time": null,
+      "collection_mode": "metadata_rows",
+      "content_scope": "safe_metadata_summary",
+      "sensitivity": "internal",
+      "record_count": 2,
+      "content": "Synthetic fixture metadata summary. PUBLIC.CONTEXT.A and PUBLIC.CONTEXT.B demonstrate versioned context records without real workspace bindings."
+    },
+    {
+      "source_id": "collection://00000000-0000-4000-8000-000000000009",
+      "kind": "data_source",
+      "title": "Public reservation schema example",
+      "url": "collection://00000000-0000-4000-8000-000000000009",
+      "last_edited_time": null,
+      "collection_mode": "schema_only",
+      "content_scope": "schema_summary",
+      "sensitivity": "confidential",
+      "record_count": 0,
+      "content": "Synthetic schema-only source. Example reservation fields include status, start and end timestamps, idempotency, and audit metadata. No rows are included."
+    },
+    {
+      "source_id": "collection://00000000-0000-4000-8000-000000000010",
+      "kind": "data_source",
+      "title": "Public inspection schema example",
+      "url": "collection://00000000-0000-4000-8000-000000000010",
+      "last_edited_time": null,
+      "collection_mode": "schema_only",
+      "content_scope": "schema_summary",
+      "sensitivity": "confidential",
+      "record_count": 0,
+      "content": "Synthetic schema-only source. Example inspection fields include assignment, scheduled and completed timestamps, exception reporting, idempotency, and audit metadata. No rows are included."
+    }
+  ]
+}

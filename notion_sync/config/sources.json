@@ -1,0 +1,90 @@
+{
+  "version": 1,
+  "provider": "public_synthetic_fixture",
+  "workspace_alias": "public-synthetic-notion",
+  "mode": "read_only",
+  "sources": [
+    {
+      "id": "00000000-0000-4000-8000-000000000001",
+      "title": "Public authority example",
+      "kind": "page",
+      "collection_mode": "full_page",
+      "sensitivity": "internal"
+    },
+    {
+      "id": "00000000-0000-4000-8000-000000000002",
+      "title": "Public operations guide example",
+      "kind": "page",
+      "collection_mode": "full_page",
+      "sensitivity": "internal"
+    },
+    {
+      "id": "00000000-0000-4000-8000-000000000003",
+      "title": "Public automation workflow example",
+      "kind": "page",
+      "collection_mode": "full_page",
+      "sensitivity": "internal"
+    },
+    {
+      "id": "00000000-0000-4000-8000-000000000004",
+      "title": "Public operations manual example",
+      "kind": "page",
+      "collection_mode": "full_page",
+      "sensitivity": "internal"
+    },
+    {
+      "id": "00000000-0000-4000-8000-000000000005",
+      "title": "Public lifecycle transition example",
+      "kind": "page",
+      "collection_mode": "full_page",
+      "sensitivity": "internal"
+    },
+    {
+      "id": "00000000-0000-4000-8000-000000000006",
+      "title": "Public data model example",
+      "kind": "page",
+      "collection_mode": "full_page",
+      "sensitivity": "internal"
+    },
+    {
+      "id": "collection://00000000-0000-4000-8000-000000000007",
+      "title": "Public resource registry example",
+      "kind": "data_source",
+      "collection_mode": "metadata_rows",
+      "sensitivity": "internal"
+    },
+    {
+      "id": "collection://00000000-0000-4000-8000-000000000008",
+      "title": "Public project context example",
+      "kind": "data_source",
+      "collection_mode": "metadata_rows",
+      "sensitivity": "internal"
+    },
+    {
+      "id": "collection://00000000-0000-4000-8000-000000000009",
+      "title": "Public reservation schema example",
+      "kind": "data_source",
+      "collection_mode": "schema_only",
+      "sensitivity": "confidential"
+    },
+    {
+      "id": "collection://00000000-0000-4000-8000-000000000010",
+      "title": "Public inspection schema example",
+      "kind": "data_source",
+      "collection_mode": "schema_only",
+      "sensitivity": "confidential"
+    }
+  ],
+  "blocked_sources": [
+    "00000000-0000-4000-8000-000000000011",
+    "collection://00000000-0000-4000-8000-000000000012"
+  ],
+  "blocked_content_classes": [
+    "person_private_rows",
+    "reservation_rows",
+    "contract_rows",
+    "finance_rows",
+    "identity_documents",
+    "access_credentials"
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "version": 1,
+  "provider": "public_synthetic_fixture",
+  "write_operations_allowed": false,
+  "page_fetches": [
+    "00000000-0000-4000-8000-000000000001",
+    "00000000-0000-4000-8000-000000000002",
+    "00000000-0000-4000-8000-000000000003",
+    "00000000-0000-4000-8000-000000000004",
+    "00000000-0000-4000-8000-000000000005",
+    "00000000-0000-4000-8000-000000000006"
+  ],
+  "metadata_queries": [
+    {
+      "data_source": "collection://00000000-0000-4000-8000-000000000007",
+      "purpose": "synthetic registry metadata example",
+      "omit": [
+        "External URL",
+        "Service Identifier",
+        "External Drive Identifier",
+        "Calendar Feed"
+      ]
+    },
+    {
+      "data_source": "collection://00000000-0000-4000-8000-000000000008",
+      "purpose": "synthetic context metadata example",
+      "omit": [
+        "Example Prompt Body",
+        "Write Rule"
+      ]
+    }
+  ],
+  "schema_only_fetches": [
+    "collection://00000000-0000-4000-8000-000000000009",
+    "collection://00000000-0000-4000-8000-000000000010"
+  ],
+  "never_query_rows": [
+    "collection://00000000-0000-4000-8000-000000000012",
+    "collection://00000000-0000-4000-8000-000000000009",
+    "collection://00000000-0000-4000-8000-000000000010"
+  ]
+}

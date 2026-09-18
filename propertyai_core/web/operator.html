@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Longstay rent</title>
+<style>
+:root{font:16px system-ui,sans-serif;color:#1d2933;background:#f6f8fa}
+*{box-sizing:border-box}body{margin:0}header{background:#173a50;color:white;padding:1rem 1.25rem}
+h1{font-size:1.35rem;margin:0}main{max-width:1050px;margin:auto;padding:1.25rem}
+.flow{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}
+section{background:white;border:1px solid #dae2e8;border-radius:.65rem;padding:1rem;min-width:0}
+h2{font-size:1.1rem;margin:.1rem 0 1rem}label{display:block;margin:.75rem 0 .2rem;font-weight:600}
+input,select{font:inherit;width:100%;border:1px solid #9faeb9;border-radius:.35rem;padding:.55rem;background:white}
+button{font:inherit;border:0;background:#0e607d;color:white;border-radius:.35rem;padding:.6rem .9rem;margin:.8rem .35rem .1rem 0;cursor:pointer}
+button:disabled{opacity:.5;cursor:not-allowed}button.secondary{background:#e6eef2;color:#173a50}
+small{color:#536977}output{display:block;padding:.55rem;background:#edf5f7;border-radius:.35rem;white-space:pre-wrap;overflow-wrap:anywhere}
+#status{margin-bottom:1rem}table{border-collapse:collapse;width:100%;font-size:.95rem}td,th{padding:.5rem;border-bottom:1px solid #dae2e8;text-align:left}
+.money{text-align:right;font-variant-numeric:tabular-nums}
+@media(max-width:720px){main{padding:.75rem}.flow{grid-template-columns:1fr}section{padding:.85rem}button{width:100%;margin:.6rem 0 0}table{display:block;overflow-x:auto;white-space:nowrap}}
+</style></head><body><header><h1>Longstay rent</h1></header><main>
+<output id="status" role="status" aria-live="polite">Ready to enter a confirmed contract.</output>
+<div class="flow">
+<section><h2>1. Confirm contract</h2>
+<label for="unit">Rental unit</label><select id="unit"></select>
+<label for="resident">Resident display name</label><input id="resident" autocomplete="off" required>
+<label for="account">Payment account display name</label><input id="account" autocomplete="off" required>
+<label for="start">Contract start</label><input id="start" type="date" required>
+<label for="end">Contract end (exclusive)</label><input id="end" type="date" required>
+<label for="rent">Monthly rent (KRW)</label><input id="rent" inputmode="numeric" pattern="[0-9]+" required>
+<label for="dueDay">Due day of month</label><input id="dueDay" type="number" min="1" max="31" required>
+<label for="dueMonth">Confirmed due month</label><input id="dueMonth" type="month" required>
+<label for="confirmation">Confirmation reference</label><input id="confirmation" required>
+<label><input id="confirmed" type="checkbox" style="width:auto"> I confirm the contract terms and billing period</label>
+<button id="create">Create contract</button>
+<output id="contractResult"></output>
+</section>
+<section><h2>2. Charge rent</h2>
+<button id="preview" class="secondary" disabled>Preview charge</button>
+<output id="chargePreview">Create a contract first.</output>
+<button id="issue" disabled>Issue rent</button>
+<output id="issueResult"></output>
+</section>
+<section><h2>3. Record payment and allocate</h2>
+<label for="paidOn">Payment date</label><input id="paidOn" type="date">
+<label for="payment">Received amount (KRW)</label><input id="payment" inputmode="numeric" pattern="[0-9]+">
+<button id="receipt" disabled>Record receipt only</button>
+<output id="receiptResult">The received amount stays unallocated until you confirm an allocation.</output>
+<label for="allocation">Amount to allocate (KRW)</label><input id="allocation" inputmode="numeric" pattern="[0-9]+">
+<button id="allocate" disabled>Confirm allocation</button>
+<output id="allocationResult"></output>
+</section>
+<section><h2>4. Balance and arrears</h2>
+<label for="month">Service month</label><input id="month" type="month">
+<button id="balance" class="secondary">Refresh balances</button>
+<div id="balances"></div>
+</section>
+</div><button id="retry" class="secondary" disabled>Retry last request with the same confirmation key</button>
+</main><script>
+const csrf=window.RENT_CSRF_TOKEN;
+const state={ledger:"0",contract:null,period:null,account:null,property:null,source:null,receivable:null,
+  contractVersion:null,sourceVersion:null,receivableVersion:null,preview:null,pending:null,busy:false};
+const $=id=>document.getElementById(id);
+const msg=(s)=>{$("status").textContent=s};
+const uuid=()=>crypto.randomUUID();
+try{const saved=sessionStorage.getItem('rent_pending');if(saved){state.pending=JSON.parse(saved);$('retry').disabled=false;msg('A previous request may have completed. Retry with its original confirmation key.')}}catch{sessionStorage.removeItem('rent_pending')}
+const intText=(id)=>{const v=$(id).value.trim();if(!/^(?:0|[1-9][0-9]*)$/.test(v))throw Error("Enter a whole KRW amount.");return v};
+async function call(method,path,body,key){
+  const headers={"Content-Type":"application/json","X-CSRF-Token":csrf};
+  if(key)headers["Idempotency-Key"]=key;
+  const res=await fetch(path,{method,headers,credentials:"same-origin",body:body===undefined?undefined:JSON.stringify(body)});
+  const data=await res.json();
+  if(!res.ok){const e=Error(data.message||data.code);e.code=data.code;e.unknown=data.state_unknown;e.latest=data.latest_versions||[];throw e}
+  return data;
+}
+async function confirmed(path,body){
+  if(state.busy)throw Error('Wait for the current request to finish.');
+  const pending={path,body,key:uuid()};state.pending=pending;sessionStorage.setItem('rent_pending',JSON.stringify(pending));$('retry').disabled=false;state.busy=true;$('balance').disabled=true;
+  try{const result=await call('POST',path,body,pending.key);state.pending=null;sessionStorage.removeItem('rent_pending');$('retry').disabled=true;state.ledger=result.ledger_revision;return result}
+  catch(e){if(e.code==='VERSION_CONFLICT'&&e.latest.length){state.ledger=e.latest[0].expected_version}if(!e.unknown && e.code){state.pending=null;sessionStorage.removeItem('rent_pending');$('retry').disabled=true}msg((e.code||e.message)+(e.unknown?' — result unknown; use the same key to reconcile.':''));throw e}
+  finally{state.busy=false;$('balance').disabled=false}
+}
+$("retry").onclick=async()=>{if(!state.pending)return;try{
+  const p=state.pending;const result=await call("POST",p.path,p.body,p.key);
+  state.ledger=result.ledger_revision;state.pending=null;sessionStorage.removeItem('rent_pending');$('retry').disabled=true;msg('Original request reconciled. Refresh balances.');
+}catch(e){msg(e.code||e.message)}};
+async function reference(){try{const r=await call('GET','/api/v1/reference-data');$('unit').replaceChildren();for(const x of r.units.filter(x=>x.active)){const o=document.createElement('option');o.value=x.rental_unit_id;o.dataset.property=x.property_id;o.textContent=x.property_name+' — '+x.unit_name;$('unit').append(o)}msg('Choose the confirmed unit and terms.')}catch(e){msg(e.code||e.message)}}
+$("create").onclick=async()=>{try{
+  if(!$("confirmed").checked)throw Error("Confirm the terms and billing period first.");
+  const unit=$("unit").selectedOptions[0];if(!unit)throw Error("Choose a unit.");
+  const start=$("start").value,end=$("end").value,dueMonth=$("dueMonth").value;
+  const confirmation=$("confirmation").value.trim();if(!confirmation)throw Error("Enter a confirmation reference.");
+  const resident=await confirmed("/api/v1/longstay/residents",{display_name:$("resident").value,linked_party_id:null,private_contact_ref:null,review_status:"VERIFIED",expected_ledger_revision:state.ledger});
+  const residentId=resident.result.entities.find(e=>e.kind==="RESIDENT").id;
+  const account=await confirmed("/api/v1/money-accounts",{display_name:$("account").value,currency:"KRW",owner_party_id:null,masked_identifier:"••••",protected_identifier_ref:null,expected_ledger_revision:state.ledger});
+  state.account=account.result.entities.find(e=>e.kind==="ACCOUNT").id;
+  const body={rental_unit_id:unit.value,starts_on:start,ends_on_exclusive:end,lifecycle:"ACTIVE",readiness:"READY",
+    resident_ids:[residentId],contract_parties:[],
+    term:{valid_from:start,valid_to_exclusive:end,monthly_rent:intText("rent"),amount_confirmed:true,
+      due_day:Number($("dueDay").value),cycle_confirmed:true,
+      cycle_rule:{schema_version:1,mode:"EXPLICIT_PERIODS",first_due_month:dueMonth,confirmation_ref:confirmation},
+      policy_version:"RENT_APPROVED_1G_2G_3G_4G_V1"},
+    billing_periods:[{cycle_start:start,cycle_end_exclusive:end,due_month:dueMonth,confirmation_ref:confirmation}],
+    previous_contract_id:null,reason:"Operator confirmed terms",expected_ledger_revision:state.ledger,occupancies:[]};
+  const result=await confirmed("/api/v1/longstay/contracts",body);
+  state.contract=result.result.entities.find(e=>e.kind==="CONTRACT").id;
+  state.period=result.result.entities.find(e=>e.kind==="PERIOD").id;
+  state.property=unit.dataset.property;
+  $("contractResult").textContent="Contract "+state.contract;
+  $("preview").disabled=false;msg("Contract recorded. Preview the charge.");
+}catch(e){msg(e.code||e.message)}};
+$("preview").onclick=async()=>{try{
+ const p=await call("POST","/api/v1/rent/charge-previews",{contract_id:state.contract,period_id:state.period});
+ state.preview=p;$("chargePreview").textContent=`${p.status}: ${p.amount??"—"} KRW; due ${p.due_on}; can issue from ${p.generation_on}`;
+ $("issue").disabled=p.status!=="READY";msg("Preview is read-only.");
+}catch(e){msg(e.code||e.message)}};
+$("issue").onclick=async()=>{try{
+ const p=state.preview;
+ const result=await confirmed("/api/v1/rent/receivables",{contract_id:state.contract,period_id:state.period,
+  expected_contract_version:p.contract_version,expected_term_versions:p.term_versions,
+  expected_ledger_revision:p.ledger_revision,calculation_sha256:p.calculation_sha256,
+  issuance_mode:"OPERATOR_CONFIRMED",replaces_receivable_id:null});
+ state.receivable=result.result.entities.find(e=>e.kind==="RECEIVABLE").id;
+ state.receivableVersion=result.result.receivable_balances[0].version;
+ $("issueResult").textContent="Receivable "+state.receivable;
+ $("receipt").disabled=false;msg("Rent issued. You can record a receipt.");
+}catch(e){msg(e.code||e.message)}};
+$("receipt").onclick=async()=>{try{
+ const result=await confirmed("/api/v1/rent/movements",{account_id:state.account,occurred_on:$("paidOn").value,
+ amount:intText("payment"),currency:"KRW",payer_raw:null,counterparty_party_id:null,
+ attribution:{status:"CONTRACT_CONFIRMED",property_id:state.property,contract_id:state.contract},
+ allocations:[],expected_ledger_revision:state.ledger});
+ const source=result.result.source_balances[0];state.source=source.source_id;state.sourceVersion=source.version;
+ $("receiptResult").textContent=`Receipt recorded. Unallocated: ${source.available} KRW`;
+ $("allocate").disabled=false;msg("Confirm an allocation only when you choose its amount.");
+}catch(e){msg(e.code||e.message)}};
+$("allocate").onclick=async()=>{try{
+ const result=await confirmed("/api/v1/rent/allocations",{source_id:state.source,
+ expected_source_version:state.sourceVersion,expected_ledger_revision:state.ledger,
+ allocations:[{receivable_id:state.receivable,amount:intText("allocation"),expected_version:state.receivableVersion,
+ attribution_confirmed:true,override_attribution_reason:null}],
+ attribution:{status:"CONTRACT_CONFIRMED",property_id:state.property,contract_id:state.contract}});
+ state.sourceVersion=result.result.source_balances[0].version;
+ state.receivableVersion=result.result.receivable_balances[0].version;
+ $("allocationResult").textContent=`Receivable balance: ${result.result.receivable_balances[0].balance} KRW; unallocated: ${result.result.source_balances[0].available} KRW`;
+ msg("Allocation recorded. Refresh balances.");
+}catch(e){msg(e.code||e.message)}};
+$("balance").onclick=async()=>{try{
+ const month=$("month").value;if(!month)throw Error("Choose a service month.");
+ const q=new URLSearchParams({month});if(state.property)q.set("property_id",state.property);
+ const r=await call("GET","/api/v1/rent/overview?"+q);
+ const root=$('balances');root.replaceChildren();const p=document.createElement('p');p.textContent='Balance: '+r.selected_month_balance+' KRW';root.append(p);const table=document.createElement('table');const head=document.createElement('tr');for(const title of ['Due','State','Balance']){const th=document.createElement('th');th.textContent=title;head.append(th)}table.append(head);for(const x of r.rows){const tr=document.createElement('tr');for(const value of [x.due_on??'—',x.overdue_state,x.balance+' KRW']){const td=document.createElement('td');td.textContent=value;tr.append(td)}table.append(tr)}root.append(table);
+ msg("Balances refreshed.");
+}catch(e){msg(e.code||e.message)}};
+reference();
+</script></body></html>

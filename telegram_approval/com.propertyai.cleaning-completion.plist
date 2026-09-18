@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.propertyai.cleaning-completion</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/Users/kate/PropertyAI/openclaw-workspace/gmail_ingest/.venv/bin/python</string>
+    <string>-m</string>
+    <string>telegram_approval.send_due_completions</string>
+    <string>--send</string>
+  </array>
+  <key>WorkingDirectory</key>
+  <string>/Users/kate/PropertyAI/openclaw-workspace</string>
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>PROPERTYAI_CLEANER_TELEGRAM_TOKEN_PATH</key>
+    <string>/REPLACE_AT_CUTOVER/propertyai/cleaner-token</string>
+  </dict>
+  <key>RunAtLoad</key>
+  <true/>
+  <key>StartInterval</key>
+  <integer>300</integer>
+  <key>StandardOutPath</key>
+  <string>/Users/kate/PropertyAI/openclaw-workspace/telegram_approval/runtime/completion-scheduler.log</string>
+  <key>StandardErrorPath</key>
+  <string>/Users/kate/PropertyAI/openclaw-workspace/telegram_approval/runtime/completion-scheduler-error.log</string>
+  <key>ProcessType</key>
+  <string>Background</string>
+</dict>
+</plist>

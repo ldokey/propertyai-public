@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.propertyai.cleaning-operations</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/Users/kate/PropertyAI/openclaw-workspace/gmail_ingest/.venv/bin/python</string>
+    <string>-m</string>
+    <string>telegram_approval.send_cleaning_operations</string>
+    <string>--send</string>
+  </array>
+  <key>WorkingDirectory</key>
+  <string>/Users/kate/PropertyAI/openclaw-workspace</string>
+  <key>StartInterval</key>
+  <integer>300</integer>
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>PROPERTYAI_CLEANER_TELEGRAM_TOKEN_PATH</key>
+    <string>/REPLACE_AT_CUTOVER/propertyai/cleaner-token</string>
+    <key>PROPERTYAI_OPS_ADMIN_TELEGRAM_TOKEN_PATH</key>
+    <string>/REPLACE_AT_CUTOVER/propertyai/ops-admin-token</string>
+    <key>PROPERTYAI_OPS_BRIEFING_ALLOWED_CHAT_IDS</key>
+    <string>REPLACE_AT_CUTOVER</string>
+  </dict>
+  <key>RunAtLoad</key>
+  <true/>
+  <key>StandardOutPath</key>
+  <string>/Users/kate/PropertyAI/openclaw-workspace/telegram_approval/runtime/cleaning-operations.out.log</string>
+  <key>StandardErrorPath</key>
+  <string>/Users/kate/PropertyAI/openclaw-workspace/telegram_approval/runtime/cleaning-operations.err.log</string>
+</dict>
+</plist>

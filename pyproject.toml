@@ -1,0 +1,19 @@
+[project]
+name = "propertyai"
+version = "0.0.0"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "google-api-python-client>=2.0",
+    "google-auth>=2.0",
+    "google-auth-oauthlib>=1.0",
+    "psycopg[binary,pool]>=3.2,<4",
+    "requests>=2.0",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0",
+]
+
+[tool.uv]
+package = false

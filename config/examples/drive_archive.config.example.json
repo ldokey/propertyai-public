@@ -1,0 +1,8 @@
+{
+  "schema_version": 1,
+  "resource_code": "DRIVE.CLEANING_ARCHIVE.EXAMPLE",
+  "display_name": "Cleaning archive example",
+  "folder_id": "<google-drive-folder-id>",
+  "canonical_url": "https://drive.google.com/drive/folders/<google-drive-folder-id>",
+  "source": "local-config"
+}

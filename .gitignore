@@ -1,0 +1,82 @@
+# Local environments and generated caches
+.venv/
+venv/
+virtualenv/
+**/__pycache__/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.py[cod]
+
+# Local configuration and credentials
+.env
+.env.*
+!.env.example
+secrets/
+**/credentials*.json
+**/*token*.json
+**/oauth*.json
+**/service-env*
+*.pem
+*.key
+
+# Host-specific operational configuration (track config/examples instead)
+drive_archive/config.json
+gmail_ingest/config.json
+gmail_ingest/listing_mappings.json
+
+# Host-specific OpenClaw agent profile and scratch state
+.openclaw/
+AGENTS.override.md
+HEARTBEAT.md
+IDENTITY.md
+SOUL.md
+TOOLS.md
+USER.md
+
+# Existing operational runtime state
+gmail_ingest/runtime/
+telegram_approval/runtime/
+drive_archive/runtime/
+health_monitor/runtime/
+notion_sync/runtime/
+notion_sync/inbox/
+openclaw-workspace-state.json
+**/requests/
+**/sessions/
+**/queue/
+**/state/
+
+# Logs and durable runtime databases
+*.log
+logs/
+*.db
+*.db-*
+*.sqlite
+*.sqlite-*
+*.sqlite3
+*.sqlite3-*
+*.wal
+*.shm
+*.backup
+*.bak
+
+# Dynamic outputs; static Python under outputs/cleaning_automation stays visible
+outputs/*.json
+outputs/live_dry_runs/
+outputs/cleaning_candidates/
+outputs/system_health/
+outputs/cleaning_automation/*.json
+outputs/qwen3.8-openclaw-retest-report.md
+outputs/scope-test.txt
+
+# Generated local RAG indexes and machine snapshots
+rag/chunks/
+rag/corpus/notion_snapshot.json
+
+# Local OS metadata
+.DS_Store
+drive_archive/runtime/
+
+# Generated at deployment from the exact authorized PropertyAI commit.
+propertyai_core/_global_writer_build_identity.py

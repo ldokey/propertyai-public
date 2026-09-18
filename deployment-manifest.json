@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "repository": "PropertyAI/openclaw-workspace",
+  "branch": "phase-3a-4-application-gate-system-test",
+  "commit": "676791c2128ec72434bff562a4ed92dadfef0ade",
+  "deployed_at": null,
+  "runtime_profile": "legacy-production-macos-launchd",
+  "source_state": "dirty_worktree_snapshot",
+  "captured_at": "2026-08-26T18:24:44+09:00",
+  "runtime_reload": false,
+  "next_baseline_branch": "legacy-phase0a"
+}

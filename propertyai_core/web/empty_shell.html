@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="csrf-token" content="$csrf">
+<title>PropertyAI · 월세 운영</title>
+<style nonce="$nonce">
+* { box-sizing: border-box; }
+html { scroll-padding-top: 1rem; }
+body { margin: 0; font: 16px/1.6 system-ui, sans-serif; background: #f5f6f8; color: #182334; }
+a { color: inherit; text-underline-offset: .2em; }
+a:focus-visible, button:focus-visible, summary:focus-visible { outline: 3px solid #3668c9; outline-offset: 3px; }
+.skip { position: absolute; left: 1rem; top: -6rem; z-index: 10; padding: .7rem; background: white; }
+.skip:focus { top: 1rem; }
+.frame { display: grid; grid-template-columns: 220px minmax(0, 1fr); min-height: 100vh; }
+.desktop-nav { padding: 2rem 1.25rem; background: #182334; color: #fff; }
+.brand { display: block; font-size: 1.2rem; font-weight: 750; margin-bottom: 1.5rem; }
+nav a { display: block; min-height: 44px; padding: .65rem .8rem; border-radius: .35rem; text-decoration: none; }
+nav a:hover { background: #ffffff18; text-decoration: underline; }
+.workspace { min-width: 0; padding: clamp(1rem, 3vw, 2.5rem); }
+header { display: flex; justify-content: space-between; align-items: center; gap: .75rem; flex-wrap: wrap; }
+h1 { font-size: clamp(1.4rem, 3vw, 2rem); margin: 0; }
+h2 { font-size: 1.25rem; }
+button, summary { font: inherit; cursor: pointer; min-height: 44px; padding: .6rem 1rem; }
+button { background: #fff; color: #182334; border: 1px solid #aeb7c5; border-radius: .4rem; }
+button:disabled { cursor: wait; }
+.mobile-nav { display: none; margin-top: 1rem; border: 1px solid #aeb7c5; border-radius: .5rem; background: #fff; }
+.mobile-nav nav { padding: .25rem; }
+.mobile-nav nav a:hover { background: #edf0f6; }
+main { min-width: 0; }
+section { margin-top: 1.5rem; padding: clamp(1rem, 2vw, 1.5rem); background: white; border: 1px solid #dde1e7; border-radius: .65rem; overflow-wrap: anywhere; }
+.summary { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
+.summary div { display: flex; flex-direction: column; padding: 1rem; border: 1px solid #dde1e7; border-radius: .5rem; }
+.summary strong { font-size: 1.6rem; }
+.state-message { font-weight: 650; }
+footer { margin-top: 2rem; font-size: .8rem; color: #526075; overflow-wrap: anywhere; }
+@media (max-width: 720px) {
+  .frame { grid-template-columns: minmax(0, 1fr); }
+  .desktop-nav { display: none; }
+  .mobile-nav { display: block; }
+  .summary { grid-template-columns: minmax(0, 1fr); gap: .6rem; }
+  .summary div { flex-direction: row; justify-content: space-between; align-items: center; gap: .5rem; }
+}
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+</style>
+</head>
+<body>
+<a class="skip" href="#content">본문으로 건너뛰기</a>
+<div class="frame">
+<aside class="desktop-nav"><span class="brand">PropertyAI</span><nav aria-label="PC 업무 탐색">$navigation</nav></aside>
+<div class="workspace">
+<header><h1>월세 운영</h1><button id="logout" type="button">로그아웃</button></header>
+<details class="mobile-nav"><summary aria-label="모바일 메뉴 열기">메뉴</summary><nav aria-label="모바일 업무 탐색">$navigation</nav></details>
+<main id="content" tabindex="-1" data-state="$state">$body</main>
+<footer>인증된 업무 셸 · 요청 ID <span id="request-id">$request_id</span></footer>
+</div>
+</div>
+<script nonce="$nonce">
+'use strict';
+const main = document.getElementById('content');
+const logout = document.getElementById('logout');
+function replaceState(state, message) {
+  const paragraph = document.createElement('p');
+  paragraph.setAttribute('role', state === 'error' ? 'alert' : 'status');
+  paragraph.textContent = message;
+  main.replaceChildren(paragraph);
+  main.dataset.state = state;
+}
+document.querySelectorAll('.mobile-nav a').forEach(link => {
+  link.addEventListener('click', () => { document.querySelector('.mobile-nav').open = false; });
+});
+logout.addEventListener('click', async () => {
+  logout.disabled = true;
+  try {
+    const response = await fetch('/auth/logout', {
+      method: 'POST', credentials: 'same-origin',
+      headers: {'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content}
+    });
+    if (response.status === 401) {
+      replaceState('unauthenticated', '로그인이 필요합니다.');
+    } else if (!response.ok) {
+      replaceState('error', response.status === 403 ? '요청 권한을 확인할 수 없습니다.' : '일시적인 오류로 로그아웃을 확인하지 못했습니다.');
+      logout.disabled = false;
+    } else {
+      const result = await response.json();
+      if (result.status !== 'LOGGED_OUT') throw new Error('INVALID_LOGOUT_RESPONSE');
+      replaceState('logged-out', '로그아웃되었습니다.');
+    }
+  } catch (_) {
+    replaceState('error', '연결 오류로 로그아웃을 확인하지 못했습니다. 다시 시도해 주세요.');
+    logout.disabled = false;
+  }
+});
+</script>
+</body>
+</html>
